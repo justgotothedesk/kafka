@@ -1,9 +1,16 @@
 package com.example.kafka;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.Acknowledgment;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.kafka.support.SendResult;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 
@@ -26,5 +33,11 @@ public class TestService {
         });
 
         return "{}";
+    }
+    @KafkaListener (topics = "test", groupId = "myGroup1" )
+    public void consume(String message) throws InterruptedException {
+        log.info("[CONSUMER] message: {}", message);
+        Thread.sleep(5000L);
+        log.info("End of sleep");
     }
 }
